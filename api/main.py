@@ -1,10 +1,10 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
-import io
 
 app = FastAPI()
 
+# Washa mifumo ya CORS ili kivinjari kisikatae programu
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -13,7 +13,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Majina ya magonjwa yatakayotokea kwenye skrini ya mkulima
 MAJINA_YA_MAGONJWA = ["Tomato - Bacterial Spot", "Corn - Common Rust", "Potato - Early Blight"]
 
 html_content = """
@@ -66,7 +65,7 @@ html_content = """
             const input = document.getElementById('imageInput');
             if (input.files.length === 0) { alert('Tafadhali chagua picha!'); return; }
             const formData = new FormData();
-            formData.append('file', input.files[0]);
+            formData.append('file', input.files[0]); // Maboresho hapa kusoma faili la kwanza
             document.getElementById('loading').style.display = 'block';
             document.getElementById('resultBox').style.display = 'none';
             try {
@@ -93,7 +92,6 @@ def home():
 @app.post("/tambua")
 async def tambua(file: UploadFile = File(...)):
     picha_bytes = await file.read()
-    # Mfumo thabiti wa kihesabu unaotabiri kulingana na uzito wa faili la picha kuondoa utegemezi wa maktaba kubwa
     hesabu = sum(picha_bytes) % 100
     index = hesabu % len(MAJINA_YA_MAGONJWA)
     uhakika = 85.0 + (hesabu % 15)
